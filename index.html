@@ -113,16 +113,11 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
   z-index:0;pointer-events:none;
 }
 .task-card::after{
-  content:'';position:absolute;top:-1px;right:14px;width:36%;height:1.5px;
-  background:linear-gradient(90deg,transparent,rgba(249,115,22,.6),transparent);
-  z-index:2;
-}
-.task-card::after{
   content:'';position:absolute;inset:0;
   background:linear-gradient(135deg,rgba(255,255,255,.06) 0%,transparent 60%);
   z-index:0;pointer-events:none;border-radius:inherit;
 }
-.tc-in{position:relative;z-index:1;padding:10px 10px 52px;display:flex;flex-direction:column;flex:1;}
+.tc-in{position:relative;z-index:1;padding:10px;display:flex;flex-direction:column;flex:1;justify-content:space-between;}
 .tc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
 .tc-emoji{font-size:1.55rem;line-height:1;flex-shrink:0;}
 .tc-menu{width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.35);border-radius:8px;flex-shrink:0;font-size:1rem;background:rgba(255,255,255,.06);}
@@ -133,10 +128,9 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .tc-pills{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px;}
 .tc-pill{font-family:'Roboto Mono',monospace;font-size:.43rem;color:rgba(249,115,22,.6);background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.18);border-radius:5px;padding:2px 6px;}
 .btn-ini{
-  position:absolute;bottom:10px;left:10px;right:10px;
-  padding:9px 0;border-radius:11px;
+  width:100%;padding:9px 0;border-radius:11px;
   font-family:'Lilita One',cursive;font-size:.88rem;color:#000;
-  cursor:pointer;border:none;
+  cursor:pointer;border:none;flex-shrink:0;
   background:linear-gradient(135deg,#fb923c,#f97316,#ea580c);
   box-shadow:0 4px 22px rgba(249,115,22,.55),0 2px 6px rgba(0,0,0,.6);
   transition:opacity .12s,transform .1s;
@@ -144,10 +138,9 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 }
 .btn-ini:active{opacity:.85;transform:scale(.97);}
 .badge-ativo{
-  position:absolute;bottom:10px;left:10px;right:10px;
-  padding:8px 0;border-radius:11px;
+  width:100%;padding:8px 0;border-radius:11px;
   font-family:'Roboto Mono',monospace;font-size:.5rem;
-  text-transform:uppercase;border:1px solid;text-align:center;opacity:.8;
+  text-transform:uppercase;border:1px solid;text-align:center;opacity:.8;flex-shrink:0;
   background:rgba(255,255,255,.06);
 }
 
@@ -578,7 +571,6 @@ function renderHome(){
             '</div>'+
             '<div class="tc-name">'+esc(task.name)+'</div>'+
             '<div class="tc-last">'+lastStr+'</div>'+
-            '<div class="tc-spacer"></div>'+
             '<div class="tc-pills">'+
               '<span class="tc-pill">'+wStr+' sem</span>'+
               '<span class="tc-pill">'+mStr+' mês</span>'+
