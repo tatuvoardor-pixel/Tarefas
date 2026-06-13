@@ -83,7 +83,7 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 }
 /* ── GLASSMORPHIC TASK CARD ── */
 .task-card{
-  border-radius:22px;position:relative;
+  aspect-ratio:1;border-radius:22px;position:relative;
   display:flex;flex-direction:column;
   background:rgba(6,2,0,.74);
   backdrop-filter:blur(28px) saturate(120%);-webkit-backdrop-filter:blur(28px) saturate(120%);
@@ -117,7 +117,7 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
   background:linear-gradient(135deg,rgba(255,255,255,.06) 0%,transparent 60%);
   z-index:0;pointer-events:none;border-radius:inherit;
 }
-.tc-in{position:relative;z-index:1;padding:12px;display:flex;flex-direction:column;flex:1;gap:6px;}
+.tc-in{position:relative;z-index:1;padding:12px;display:flex;flex-direction:column;flex:1;justify-content:space-between;}
 .tc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
 .tc-emoji{font-size:1.55rem;line-height:1;flex-shrink:0;}
 .tc-menu{width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.35);border-radius:8px;flex-shrink:0;font-size:1rem;background:rgba(255,255,255,.06);}
@@ -231,6 +231,13 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 @keyframes fl2{0%,100%{transform:translate(0,0)}50%{transform:translate(38px,-22px)}}
 @keyframes fl3{0%,100%{transform:translate(0,0)scale(1)}40%{transform:translate(22px,-32px)scale(1.15)}75%{transform:translate(-18px,14px)scale(.92)}}
 @keyframes fl4{0%,100%{transform:translate(0,0)}60%{transform:translate(-25px,20px)}}
+
+.rs-lbl{font-family:'Roboto Mono',monospace;font-size:.52rem;text-transform:uppercase;color:rgba(255,255,255,.3);}
+.rs-val{font-family:'Lilita One',cursive;font-size:1.4rem;line-height:1;}
+.rs-sub{font-family:'Roboto Mono',monospace;font-size:.44rem;color:rgba(255,255,255,.3);margin-top:3px;}
+.rs-nome{font-family:'Lilita One',cursive;font-size:.72rem;color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rs-vazio{font-family:'Roboto Mono',monospace;font-size:.52rem;color:rgba(255,255,255,.2);}
+.rs-head{font-family:'Roboto Mono',monospace;font-size:.44rem;color:rgba(255,255,255,.3);margin-bottom:4px;}
 </style>
 </head>
 <body>
@@ -516,6 +523,31 @@ function renderHome(){
 
   var html='';
 
+  // ── Card resumo do dia ──
+  var todayTasks=sess.filter(function(s){return s.date===t;});
+  var nomes=todayTasks.slice(-3).map(function(s){return s.tname;});
+  html+=
+    '<div style="background:rgba(6,2,0,.74);backdrop-filter:blur(28px);border:1.5px solid rgba(255,255,255,.52);border-top:1.5px solid rgba(255,255,255,.88);border-radius:18px;padding:14px;box-shadow:0 8px 24px rgba(0,0,0,.85);">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">'+
+        '<span class="rs-lbl">Hoje</span>'+
+        '<span class="rs-val" style="color:#f97316;">'+todaySess.length+' sessão'+(todaySess.length!==1?'ões':'')+'</span>'+
+      '</div>'+
+      '<div style="display:flex;gap:8px;">'+
+        '<div style="flex:1;background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.18);border-radius:10px;padding:10px;text-align:center;">'+
+          '<div class="rs-val" style="color:#f97316;">'+todaySess.length+'</div>'+
+          '<div class="rs-sub">sessões</div>'+
+        '</div>'+
+        '<div style="flex:1;background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.18);border-radius:10px;padding:10px;text-align:center;">'+
+          '<div class="rs-val" style="color:#fb923c;">'+todayMin+'</div>'+
+          '<div class="rs-sub">minutos</div>'+
+        '</div>'+
+        '<div style="flex:2;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px;">'+
+          '<div class="rs-head">Últimas</div>'+
+          (nomes.length?nomes.map(function(n){return '<div class="rs-nome">'+esc(n)+'</div>';}).join(''):'<div class="rs-vazio">nenhuma ainda</div>')+
+        '</div>'+
+      '</div>'+
+    '</div>';
+
   // ── Sessões ativas (multi-timer) ──
   var activeIds=Object.keys(S.active);
   if(activeIds.length){
@@ -532,8 +564,8 @@ function renderHome(){
   }
 
   // ── Barra de hoje ──
-  html+=
-    '<div class="today-bar">'+
+  // today bar removido
+  html+='';html+=
       '<div class="tb"><div class="tb-val" style="color:var(--acc)">'+todaySess.length+'</div><div class="tb-lbl">sessões<br>hoje</div></div>'+
       '<div class="tb"><div class="tb-val" style="color:var(--flow)">'+todayMin+'</div><div class="tb-lbl">min<br>hoje</div></div>'+
     '</div>';
@@ -563,18 +595,13 @@ function renderHome(){
       var gw=hexToRgba(c.c,.75), shadow=hexToRgba(c.c,.5);
       html+=
         '<div class="tc-wrap" style="--gw:'+gw+';">'+
-        '<div class="task-card'+(isActive?' task-active':'')+'" style="--btn-color:'+c.c+';--btn-shadow:'+shadow+';">'+
+        '<div class="task-card'+(isActive?' task-active':'')+'" style="--btn-color:'+c.c+';">'+
           '<div class="tc-in">'+
-            '<div class="tc-head">'+
+            '<div style="display:flex;align-items:center;justify-content:space-between;">'+
               '<div class="tc-emoji">'+c.e+'</div>'+
               '<button class="tc-menu" onclick="showDD('+task.id+',event)">⋮</button>'+
             '</div>'+
             '<div class="tc-name">'+esc(task.name)+'</div>'+
-            '<div class="tc-last">'+lastStr+'</div>'+
-            '<div class="tc-pills">'+
-              '<span class="tc-pill">'+wStr+' sem</span>'+
-              '<span class="tc-pill">'+mStr+' mês</span>'+
-            '</div>'+
             botBtn+
           '</div>'+
         '</div>'+
@@ -600,7 +627,6 @@ function buildActiveCard(id){
           '<span class="ac-emoji">'+c.e+'</span>'+
           '<div class="ac-info">'+
             '<div class="ac-name">'+esc(sess.tname)+'</div>'+
-            '<div class="ac-ph" id="ac-ph-'+id+'" style="color:'+cor+';">'+PH_NAMES[ph]+'</div>'+
           '</div>'+
         '</div>'+
         '<div class="ac-right">'+
@@ -634,8 +660,6 @@ function masterTick(){
     var te=document.getElementById('ac-t-'+id);
     if(te){te.textContent=fmt(sess.elapsed);te.style.color=cor;}
 
-    var pe=document.getElementById('ac-ph-'+id);
-    if(pe){pe.textContent=PH_NAMES[ph];pe.style.color=cor;}
 
     var be=document.getElementById('ac-b-'+id);
     if(be){be.style.width=prog+'%';be.style.background=cor;}
